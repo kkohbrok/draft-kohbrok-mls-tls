@@ -110,7 +110,7 @@ struct {
 - Initiator creates KeyPackage
   - Initiator can use any ciphersuite and extension they want
   - Initiator advertises its support for extensions in Capabilities
-- Responder inspects KeyPackage 
+- Responder inspects KeyPackage
   - Check ciphersuite support
   - Check extension support
   - Check validity of credential
@@ -142,7 +142,7 @@ key update.
 
 The initiator is in one of the following states:
 
-1) Default 
+1) Default
 2) Waiting for confirmation of own update
 3) Waiting for the server to update its own key material
 
