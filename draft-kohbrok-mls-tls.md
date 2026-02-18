@@ -35,12 +35,13 @@ informative:
 
 --- abstract
 
-This document details how MLS can be combined with the TLS record layer to yield
-a secure channel protocol that can be initialized configured to be post-quantum
-secure and that is suitable for long-lived connection thanks to MLS key updates.
-In the context of this composed protocol, MLS acts as a continuous key agreement
-protocol that allows initiator and responder to update their key material not
-just to achieve forward-secrecy, but also to post-compromise security.
+This document details how the Messaging Layer Security (MLS) protocol can be
+combined with the Transport Layer Security (TLS) record layer to yield a secure
+channel protocol that can be configured to be post-quantum secure and that is
+suitable for long-lived connection thanks to MLS key updates. In the context of
+this composed protocol, MLS acts as a continuous key agreement protocol that
+allows initiator and responder to update their key material not just to achieve
+forward-secrecy, but also to post-compromise security.
 
 --- middle
 
@@ -55,12 +56,67 @@ initial handshake, initiator and responder can tunnel MLS commits through the
 secure channel to update their key material. Key material updates allow both
 parties to achieve forward-secrecy and post-compromise security.
 
+# MLS as continuous key agreement
+
+MLS is a secure messaging protocol that can also act as a continuous key
+agreement protocol. In particular all parties in an MLS group can not only
+exchange encrypted messages, but also export shared key material for use outside
+of MLS.
+
+Within an MLS group, each member has distinct public key material that it can
+update by sending a _commit_ that updates its own key material and the key
+material exported from the group. Such an update allows a client to achieve
+forward secrecy (FS) and post-compromise security (PCS). FS and PCS can be
+intuitively understood as follows.
+
+FS is the property that prevents an adversary from being able to decrypt
+messages sent in the past even if it obtains current key material. Group members
+achieve FS by deleting previously exported key material after an update.
+
+PCS is the property that prevents an adverary from decrypting future messages
+even if it obtains current key material. Clients can achieve this property by
+generating new key material and encrypting it to other group members. PCS is
+achieven when other group members update the public keys of the updating client.
+
+# Composing MLS and TLS
+
+The MLS-TLS protocol is a two-party protocol that establishes a secure channel
+between an initiator and a responder. The protocol makes use of MLS's capability
+to export key material and uses said key material to initialize the record
+protection layer of the TLS protocol as defined in Section 5 of {{!RFC8446}}. As
+such MLS essentially replaces the TLS 1.3 handshake.
+
+The specific protocol flow for how initiator and responder establish an MLS
+group and how the exported keys are subsequently updated is described in
+{{!I-D.draft-kohbrok-mls-two-party-profile}}, which defines a two-party profile
+for MLS. In particular, the two-party profile describes how updates are
+coordinated and when exported keys are ready to be used, in this case to
+initialize or update the TLS record layer.
+
+# Advantages of MLS as key agreement
+
+The ability of both parties to achieve PCS by sending MLS commits in-band is
+increasingly valuable the higher the risk of compromise of either party. As
+such, the MLS-TLS protocol is specifically suited for scenarios where
+connections tend to be long-lived. For example, in cases where connection
+(re)establishment is costly.
+
+MLS is a modular design. When using it as continuous key agreement, this yields
+two advantages: Key Encapsulation Mechanism (KEM) as abstraction and arbitrary
+credential types.
+
+Using KEMs as an abstraction allows MLS-TLS to be configured with a variety of
+ciphersuites including the post-quantum secure ciphersuites defined in
+{{!I-D.draft-ietf-mls-pq-ciphersuites}}.
+
+MLS does not require clients to use any specific credential type as long as they
+are provided with signature keys to sign MLS messages. MLS-TLS is thus largely
+agnostic to how the application binds a client's identity to its signature
+public key.
+
 # Protocol Overview
 
-The MLS-TLS protocol is not interoperable with vanilla TLS 1.3. As such, a
-responder that wants to serve both variants needs to listen on individual ports.
-
-The protocol consists of three phases.
+The MLS-TLS protocol consists of three phases.
 
 1. Initial key agreement, where initiator and responder agree on key material
    using the MLS two party profile. At the end of this phase, both parties are
