@@ -1,24 +1,19 @@
 ---
-title: "Using MLS as Handshake in TLS 1.3"
+title: "The MLS-TLS secure channel protocol"
 abbrev: "MLS-TLS"
 category: info
 
 docname: draft-kohbrok-mls-tls-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
-number:
-date:
-consensus: true
+consensus: false
 v: 3
 area: "Security"
-workgroup: "Messaging Layer Security"
 keyword:
  - TLS
  - Handshake
 venue:
-  group: "Messaging Layer Security"
-  type: "Working Group"
-  mail: "mls@ietf.org"
-  arch: "https://mailarchive.ietf.org/arch/browse/mls/"
+  group: "Individual Submission"
+  type: "Individual"
   github: "kkohbrok/draft-kohbrok-mls-tls"
   latest: "https://kkohbrok.github.io/draft-kohbrok-mls-tls/draft-kohbrok-mls-tls.html"
 
@@ -41,9 +36,9 @@ informative:
 --- abstract
 
 This document details how MLS can be combined with the TLS record layer to yield
-a secure channel protocol that can be configured to be post-quantum secure and
-that is suitable for long-lived connection thanks to MLS key updates. In the
-context of this composed protocol, MLS acts as a continuous key agreement
+a secure channel protocol that can be initialized configured to be post-quantum
+secure and that is suitable for long-lived connection thanks to MLS key updates.
+In the context of this composed protocol, MLS acts as a continuous key agreement
 protocol that allows initiator and responder to update their key material not
 just to achieve forward-secrecy, but also to post-compromise security.
 
@@ -62,19 +57,20 @@ parties to achieve forward-secrecy and post-compromise security.
 
 # Protocol Overview
 
-The TLS variant with MLS as handshake is not interoperable with vanilla TLS 1.3.
-As such, a responder that wants to serve both variants needs to listen on
-individual ports.
+The MLS-TLS protocol is not interoperable with vanilla TLS 1.3. As such, a
+responder that wants to serve both variants needs to listen on individual ports.
 
 The protocol consists of three phases.
 
 1. Initial key agreement, where initiator and responder agree on key material
-   using the MLS two party profile.
-2. Secure channel phase, where initiator and responder can transfer data
-   encrypted using the TLS 1.3 record layer protocol. The encryption keys are
-   derived from the MLS group created during the initial key agreement phase.
-   During the secure channel phase, initiator and responder can tunnel MLS
-   commits through the secure channel to update their key material.
+   using the MLS two party profile. At the end of this phase, both parties are
+   members of an MLS group that is used in the other phases to generate key
+   material.
+2. Secure channel phase, where initiator and responder can encrypt data using
+   the TLS 1.3 record layer protocol. The encryption keys are derived from the
+   MLS group created during the initial key agreement phase. During the secure
+   channel phase, initiator and responder can tunnel MLS commits through the
+   secure channel to update their key material.
 3. Resumption, where initiator or responder can resume a previously interrupted
    connection without having to repeat phase 1, including the ability to send
    data in the first flight of messages.
@@ -108,9 +104,9 @@ secret required by the TLS record layer.
 The MLS two party profile allows both parties to update the MLS group created in
 the initial key agreement phase. In the context of MLS-TLS, these
 ConnectionUpdate and EpochKeyUpdate messages (as defined in
-{{!I-D.draft-kohbrok-mls-two-party-profile}}) are sent in place of key update messages
-defined in {{!RFC8446}}. Concretely, they serialized and sent as the `content`
-of a TLSInnerPlaintext message with `type` set to `handshake`.
+{{!I-D.draft-kohbrok-mls-two-party-profile}}) are sent in place of key update
+messages defined in {{!RFC8446}}. Concretely, they are serialized and sent as
+the `content` of a TLSInnerPlaintext message with `type` set to `handshake`.
 
 TODO: The two-party profile I-D should define a message similar to
 {{!RFC9420}}'s MLSMessage, which contains either a ClientHello, ServerHello,
@@ -118,8 +114,10 @@ ConnectionUpdate or EpochKeyUpdate. This is to allow recipients to know what to
 deserialize when they receive an in-band update message.
 
 When a party is clear to start using the key material as specified in Section 4
-of {{!I-D.draft-kohbrok-mls-two-party-profile}}, the client derives new application
-traffic secrets as specified in {{initializing-the-record-layer}}.
+of {{!I-D.draft-kohbrok-mls-two-party-profile}}, the client derives new
+application traffic secrets as specified in {{initializing-the-record-layer}}
+and replaces the previous key material used by the record layer to encrypt
+messages.
 
 # Security Considerations
 
