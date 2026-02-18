@@ -2,24 +2,25 @@
 
 
 
-Messaging Layer Security                                      K. Kohbrok
+Network Working Group                                         K. Kohbrok
 Internet-Draft                                                 R. Robert
 Intended status: Informational                               Phoenix R&D
 Expires: 22 August 2026                                 18 February 2026
 
 
-                   Using MLS as Handshake in TLS 1.3
+                  The MLS-TLS secure channel protocol
                       draft-kohbrok-mls-tls-latest
 
 Abstract
 
    This document details how MLS can be combined with the TLS record
-   layer to yield a secure channel protocol that can be configured to be
-   post-quantum secure and that is suitable for long-lived connection
-   thanks to MLS key updates.  In the context of this composed protocol,
-   MLS acts as a continuous key agreement protocol that allows initiator
-   and responder to update their key material not just to achieve
-   forward-secrecy, but also to post-compromise security.
+   layer to yield a secure channel protocol that can be initialized
+   configured to be post-quantum secure and that is suitable for long-
+   lived connection thanks to MLS key updates.  In the context of this
+   composed protocol, MLS acts as a continuous key agreement protocol
+   that allows initiator and responder to update their key material not
+   just to achieve forward-secrecy, but also to post-compromise
+   security.
 
 About This Document
 
@@ -29,11 +30,6 @@ About This Document
    https://kkohbrok.github.io/draft-kohbrok-mls-tls/draft-kohbrok-mls-
    tls.html.  Status information for this document may be found at
    https://datatracker.ietf.org/doc/draft-kohbrok-mls-tls/.
-
-   Discussion of this document takes place on the Messaging Layer
-   Security Working Group mailing list (mailto:mls@ietf.org), which is
-   archived at https://mailarchive.ietf.org/arch/browse/mls/.  Subscribe
-   at https://www.ietf.org/mailman/listinfo/mls/.
 
    Source for this draft and an issue tracker can be found at
    https://github.com/kkohbrok/draft-kohbrok-mls-tls.
@@ -95,21 +91,23 @@ Table of Contents
 
 2.  Protocol Overview
 
-   The TLS variant with MLS as handshake is not interoperable with
-   vanilla TLS 1.3.  As such, a responder that wants to serve both
-   variants needs to listen on individual ports.
+   The MLS-TLS protocol is not interoperable with vanilla TLS 1.3.  As
+   such, a responder that wants to serve both variants needs to listen
+   on individual ports.
 
    The protocol consists of three phases.
 
    1.  Initial key agreement, where initiator and responder agree on key
-       material using the MLS two party profile.
+       material using the MLS two party profile.  At the end of this
+       phase, both parties are members of an MLS group that is used in
+       the other phases to generate key material.
 
-   2.  Secure channel phase, where initiator and responder can transfer
-       data encrypted using the TLS 1.3 record layer protocol.  The
-       encryption keys are derived from the MLS group created during the
-       initial key agreement phase.  During the secure channel phase,
-       initiator and responder can tunnel MLS commits through the secure
-       channel to update their key material.
+   2.  Secure channel phase, where initiator and responder can encrypt
+       data using the TLS 1.3 record layer protocol.  The encryption
+       keys are derived from the MLS group created during the initial
+       key agreement phase.  During the secure channel phase, initiator
+       and responder can tunnel MLS commits through the secure channel
+       to update their key material.
 
    3.  Resumption, where initiator or responder can resume a previously
        interrupted connection without having to repeat phase 1,
@@ -145,7 +143,7 @@ Table of Contents
    created in the initial key agreement phase.  In the context of MLS-
    TLS, these ConnectionUpdate and EpochKeyUpdate messages (as defined
    in [I-D.draft-kohbrok-mls-two-party-profile]) are sent in place of
-   key update messages defined in [RFC8446].  Concretely, they
+   key update messages defined in [RFC8446].  Concretely, they are
    serialized and sent as the content of a TLSInnerPlaintext message
    with type set to handshake.
 
@@ -157,7 +155,9 @@ Table of Contents
 
    When a party is clear to start using the key material as specified in
    Section 4 of [I-D.draft-kohbrok-mls-two-party-profile], the client
-   derives new application traffic secrets as specified in Section 3.
+   derives new application traffic secrets as specified in Section 3 and
+   replaces the previous key material used by the record layer to
+   encrypt messages.
 
 5.  Security Considerations
 
