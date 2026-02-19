@@ -36,12 +36,12 @@ informative:
 --- abstract
 
 This document details how the Messaging Layer Security (MLS) protocol can be
-combined with the Transport Layer Security (TLS) record layer to yield a secure
-channel protocol that can be configured to be post-quantum secure and that is
-suitable for long-lived connection thanks to MLS key updates. In the context of
-this composed protocol, MLS acts as a continuous key agreement protocol that
-allows initiator and responder to update their key material not just to achieve
-forward-secrecy, but also to post-compromise security.
+combined with the Transport Layer Security (TLS) record layer to yield the
+MLS-TLS secure channel protocol. In this composed protocol, MLS acts as a
+continuous key agreement protocol that allows initiator and responder to protect
+both past and future messages in case of key material compromise. As such,
+MLS-TLS is suitable for long-lived connections. MLS-TLS also inherits the
+modularity of MLS and can be configured with post-quantum secure ciphersuites.
 
 --- middle
 
@@ -102,12 +102,13 @@ connections tend to be long-lived. For example, in cases where connection
 (re)establishment is costly.
 
 MLS is a modular design. When using it as continuous key agreement, this yields
-two advantages: Key Encapsulation Mechanism (KEM) as abstraction and arbitrary
+two advantages: Post-quantum capable cryptographic abstractions and arbitrary
 credential types.
 
-Using KEMs as an abstraction allows MLS-TLS to be configured with a variety of
-ciphersuites including the post-quantum secure ciphersuites defined in
-{{!I-D.draft-ietf-mls-pq-ciphersuites}}.
+MLS's ciphersuites use Key Encapsulation Mechanisms (KEMs) and signature
+algorithms as abstractions. This allows the use of a variety of cryptographic
+algorithms inclusing post-quantum secure ones for both confidentiality and
+authentication as defined in {{!I-D.draft-ietf-mls-pq-ciphersuites}}.
 
 MLS does not require clients to use any specific credential type as long as they
 are provided with signature keys to sign MLS messages. MLS-TLS is thus largely
