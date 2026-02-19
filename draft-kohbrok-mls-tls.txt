@@ -5,7 +5,7 @@
 Network Working Group                                         K. Kohbrok
 Internet-Draft                                                 R. Robert
 Intended status: Informational                               Phoenix R&D
-Expires: 22 August 2026                                 18 February 2026
+Expires: 23 August 2026                                 19 February 2026
 
 
                   The MLS-TLS secure channel protocol
@@ -15,12 +15,12 @@ Abstract
 
    This document details how the Messaging Layer Security (MLS) protocol
    can be combined with the Transport Layer Security (TLS) record layer
-   to yield a secure channel protocol that can be configured to be post-
-   quantum secure and that is suitable for long-lived connection thanks
-   to MLS key updates.  In the context of this composed protocol, MLS
-   acts as a continuous key agreement protocol that allows initiator and
-   responder to update their key material not just to achieve forward-
-   secrecy, but also to post-compromise security.
+   to yield the MLS-TLS secure channel protocol.  In this composed
+   protocol, MLS acts as a continuous key agreement protocol that allows
+   initiator and responder to protect both past and future messages in
+   case of key material compromise.  As such, MLS-TLS is suitable for
+   long-lived connections.  MLS-TLS also inherits the modularity of MLS
+   and can be configured with post-quantum secure ciphersuites.
 
 About This Document
 
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 August 2026.
+   This Internet-Draft will expire on 23 August 2026.
 
 Copyright Notice
 
@@ -143,12 +143,14 @@ Table of Contents
    in cases where connection (re)establishment is costly.
 
    MLS is a modular design.  When using it as continuous key agreement,
-   this yields two advantages: Key Encapsulation Mechanism (KEM) as
-   abstraction and arbitrary credential types.
+   this yields two advantages: Post-quantum capable cryptographic
+   abstractions and arbitrary credential types.
 
-   Using KEMs as an abstraction allows MLS-TLS to be configured with a
-   variety of ciphersuites including the post-quantum secure
-   ciphersuites defined in [I-D.draft-ietf-mls-pq-ciphersuites].
+   MLS's ciphersuites use Key Encapsulation Mechanisms (KEMs) and
+   signature algorithms as abstractions.  This allows the use of a
+   variety of cryptographic algorithms inclusing post-quantum secure
+   ones for both confidentiality and authentication as defined in
+   [I-D.draft-ietf-mls-pq-ciphersuites].
 
    MLS does not require clients to use any specific credential type as
    long as they are provided with signature keys to sign MLS messages.
