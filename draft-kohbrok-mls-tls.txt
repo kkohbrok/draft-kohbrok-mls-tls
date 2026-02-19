@@ -68,15 +68,17 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  MLS as continuous key agreement
+   2.  MLS as a continuous key agreement protocol
    3.  Composing MLS and TLS
-   4.  Advantages of MLS as key agreement
+   4.  Advantages of MLS
    5.  Protocol Overview
-   6.  Initializing the record layer
-   7.  Updating record layer keys
-   8.  Security Considerations
-   9.  IANA Considerations
-   10. Normative References
+   6.  Deriving keys for record layer protection
+   7.  Protecting application data on the wire
+   8.  Updating record layer protection keys
+   9.  Preventing cross-protocol attacks
+   10. Security Considerations
+   11. IANA Considerations
+   12. Normative References
    Acknowledgments
    Authors' Addresses
 
@@ -86,16 +88,16 @@ Table of Contents
    [I-D.draft-kohbrok-mls-two-party-profile] and combines it with the
    record layer of TLS 1.3 [RFC8446] to yield a secure channel protocol.
    The composition of both protocols is seamless due to the modular
-   design of TLS 1.3 and MLS capability to act as a continuous key
+   design of TLS 1.3 and MLS's capability to act as a continuous key
    agreement protocol.  After the initial handshake, initiator and
    responder can tunnel MLS commits through the secure channel to update
    their key material.  Key material updates allow both parties to
    achieve forward-secrecy and post-compromise security.
 
-2.  MLS as continuous key agreement
+2.  MLS as a continuous key agreement protocol
 
    MLS is a secure messaging protocol that can also act as a continuous
-   key agreement protocol.  In particular all parties in an MLS group
+   key agreement protocol.  In particular, all parties in an MLS group
    can not only exchange encrypted messages, but also export shared key
    material for use outside of MLS.
 
@@ -111,10 +113,10 @@ Table of Contents
    material.  Group members achieve FS by deleting previously exported
    key material after an update.
 
-   PCS is the property that prevents an adverary from decrypting future
+   PCS is the property that prevents an adversary from decrypting future
    messages even if it obtains current key material.  Clients can
    achieve this property by generating new key material and encrypting
-   it to other group members.  PCS is achieven when other group members
+   it to other group members.  PCS is achieved when other group members
    update the public keys of the updating client.
 
 3.  Composing MLS and TLS
@@ -134,7 +136,7 @@ Table of Contents
    ready to be used, in this case to initialize or update the TLS record
    layer.
 
-4.  Advantages of MLS as key agreement
+4.  Advantages of MLS
 
    The ability of both parties to achieve PCS by sending MLS commits in-
    band is increasingly valuable the higher the risk of compromise of
@@ -142,15 +144,16 @@ Table of Contents
    for scenarios where connections tend to be long-lived.  For example,
    in cases where connection (re)establishment is costly.
 
-   MLS is a modular design.  When using it as continuous key agreement,
-   this yields two advantages: Post-quantum capable cryptographic
-   abstractions and arbitrary credential types.
+   MLS is a modular design.  When using it as a continuous key agreement
+   protocol, this yields two advantages: Post-quantum capable
+   cryptographic abstractions and arbitrary credential types.
 
    MLS's ciphersuites use Key Encapsulation Mechanisms (KEMs) and
    signature algorithms as abstractions.  This allows the use of a
-   variety of cryptographic algorithms inclusing post-quantum secure
-   ones for both confidentiality and authentication as defined in
-   [I-D.draft-ietf-mls-pq-ciphersuites].
+   variety of cryptographic algorithms including post-quantum secure
+   ones for both confidentiality and authentication.  See
+   [I-D.draft-ietf-mls-pq-ciphersuites] for hybrid and pure post-quantum
+   secure ciphersuites.
 
    MLS does not require clients to use any specific credential type as
    long as they are provided with signature keys to sign MLS messages.
@@ -182,7 +185,7 @@ Table of Contents
    how message updates work, see
    [I-D.draft-kohbrok-mls-two-party-profile].
 
-6.  Initializing the record layer
+6.  Deriving keys for record layer protection
 
    Both after the initial key agreement phase and the resumption phase,
    initiator and responder derive key material from the MLS group
@@ -201,7 +204,18 @@ Table of Contents
    Where MLS-Exporter is defined in [RFC9420] and Length is the size of
    the secret required by the TLS record layer.
 
-7.  Updating record layer keys
+7.  Protecting application data on the wire
+
+   Application data is encoded as described in Section 5.1 of [RFC8446]
+   and protected as described in Section 5.2 of [RFC8446].  The keys
+   derived from the MLS group as described in Section Section 6 are used
+   to calculate the traffic keys for record protection as described in
+   Section 7.3 of [RFC8446].
+
+   The application traffic secrets MUST be deleted after deriving the
+   traffic keys.
+
+8.  Updating record layer protection keys
 
    The MLS two party profile allows both parties to update the MLS group
    created in the initial key agreement phase.  In the context of MLS-
@@ -217,21 +231,30 @@ Table of Contents
    recipients to know what to deserialize when they receive an in-band
    update message.
 
-   When a party is clear to start using the key material as specified in
+   When a party is ready to start using the key material as specified in
    Section 4 of [I-D.draft-kohbrok-mls-two-party-profile], the client
-   derives new application traffic secrets as specified in Section 6 and
-   replaces the previous key material used by the record layer to
-   encrypt messages.
+   derives new application traffic secrets as specified in Section 6.
+   These secrets are then used to further derive the traffic keys for
+   record protection as described in Section 7.3 of [RFC8446].
 
-8.  Security Considerations
+   Key material that is replaced in this way MUST be deleted.
+
+9.  Preventing cross-protocol attacks
+
+   TODO: Define a component that the initiator needs to include in its
+   leaf node and that MUST be included in the context of the MLS group.
+   This purpose of the component is to clearly mark the individual
+   messages for use in the context of MLS-TLS.
+
+10.  Security Considerations
 
    TODO Security
 
-9.  IANA Considerations
+11.  IANA Considerations
 
    This document has no IANA actions.
 
-10.  Normative References
+12.  Normative References
 
    [I-D.draft-ietf-mls-pq-ciphersuites]
               Mahy, R. and R. Barnes, "ML-KEM and Hybrid Cipher Suites
