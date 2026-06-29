@@ -1,8 +1,8 @@
 <!-- regenerate: on (set to off if you edit this file) -->
 
-# Using MLS as Handshake in TLS 1.3
+# The MLS-TLS secure channel protocol
 
-This is the working area for the individual Internet-Draft, "Using MLS as Handshake in TLS 1.3".
+This is the working area for the individual Internet-Draft, "The MLS-TLS secure channel protocol".
 
 * [Editor's Copy](https://kkohbrok.github.io/draft-kohbrok-mls-tls/#go.draft-kohbrok-mls-tls.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-kohbrok-mls-tls)
