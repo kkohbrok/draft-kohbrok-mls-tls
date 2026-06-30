@@ -161,9 +161,9 @@ secret required by the TLS record layer.
 
 Application data is encoded as described in Section 5.1 of {{!RFC8446}} and
 protected as described in Section 5.2 of {{!RFC8446}}. The keys derived from the
-MLS group as described in Section {{deriving-keys-for-record-layer-protection}}
-are used to calculate the traffic keys for record protection as described in
-Section 7.3 of {{!RFC8446}}.
+MLS group as described in {{deriving-keys-for-record-layer-protection}} are used
+to calculate the traffic keys for record protection as described in Section 7.3
+of {{!RFC8446}}.
 
 MLS-TLS uses the TLS 1.3 record-layer sequence-number and per-record nonce
 construction specified in Section 5.3 of {{!RFC8446}}. Sequence numbers are
