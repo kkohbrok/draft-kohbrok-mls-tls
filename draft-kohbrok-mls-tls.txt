@@ -5,7 +5,7 @@
 Network Working Group                                         K. Kohbrok
 Internet-Draft                                                 R. Robert
 Intended status: Informational                               Phoenix R&D
-Expires: 23 August 2026                                 19 February 2026
+Expires: 1 January 2027                                     30 June 2026
 
 
                   The MLS-TLS secure channel protocol
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 August 2026.
+   This Internet-Draft will expire on 1 January 2027.
 
 Copyright Notice
 
@@ -259,9 +259,9 @@ Table of Contents
    [I-D.draft-ietf-mls-pq-ciphersuites]
               Mahy, R. and R. Barnes, "ML-KEM and Hybrid Cipher Suites
               for Messaging Layer Security", Work in Progress, Internet-
-              Draft, draft-ietf-mls-pq-ciphersuites-01, 4 November 2025,
+              Draft, draft-ietf-mls-pq-ciphersuites-04, 18 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-mls-pq-
-              ciphersuites-01>.
+              ciphersuites-04>.
 
    [I-D.draft-kohbrok-mls-two-party-profile]
               Kohbrok, K. and R. Robert, "A two-party profile for MLS",
