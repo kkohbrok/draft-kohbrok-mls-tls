@@ -161,9 +161,15 @@ secret required by the TLS record layer.
 
 Application data is encoded as described in Section 5.1 of {{!RFC8446}} and
 protected as described in Section 5.2 of {{!RFC8446}}. The keys derived from the
-MLS group as described in Section {{deriving-keys-for-record-layer-protection}}
-are used to calculate the traffic keys for record protection as described in
-Section 7.3 of {{!RFC8446}}.
+MLS group as described in {{deriving-keys-for-record-layer-protection}} are used
+to calculate the traffic keys for record protection as described in Section 7.3
+of {{!RFC8446}}.
+
+MLS-TLS uses the TLS 1.3 record-layer sequence-number and per-record nonce
+construction specified in Section 5.3 of {{!RFC8446}}. Sequence numbers are
+maintained separately for each direction and are reset whenever new record
+protection keys are installed. Record padding is handled as specified in Section
+5.4 of {{!RFC8446}}.
 
 The application traffic secrets MUST be deleted after deriving the traffic keys.
 
@@ -189,6 +195,11 @@ further derive the traffic keys for record protection as described in Section
 7.3 of {{!RFC8446}}.
 
 Key material that is replaced in this way MUST be deleted.
+
+The key usage limits in Section 5.5 of {{!RFC8446}} apply to each set of
+MLS-TLS record protection keys. Before reaching those limits, or before a record
+sequence number would wrap, an implementation MUST replace the record protection
+keys using the update mechanism in this section or terminate the connection.
 
 # Preventing cross-protocol attacks
 
