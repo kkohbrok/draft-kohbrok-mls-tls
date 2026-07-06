@@ -5,7 +5,7 @@
 Network Working Group                                         K. Kohbrok
 Internet-Draft                                                 R. Robert
 Intended status: Informational                               Phoenix R&D
-Expires: 1 January 2027                                     30 June 2026
+Expires: 7 January 2027                                      6 July 2026
 
 
                   The MLS-TLS secure channel protocol
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2027.
+   This Internet-Draft will expire on 7 January 2027.
 
 Copyright Notice
 
@@ -208,9 +208,15 @@ Table of Contents
 
    Application data is encoded as described in Section 5.1 of [RFC8446]
    and protected as described in Section 5.2 of [RFC8446].  The keys
-   derived from the MLS group as described in Section Section 6 are used
-   to calculate the traffic keys for record protection as described in
+   derived from the MLS group as described in Section 6 are used to
+   calculate the traffic keys for record protection as described in
    Section 7.3 of [RFC8446].
+
+   MLS-TLS uses the TLS 1.3 record-layer sequence-number and per-record
+   nonce construction specified in Section 5.3 of [RFC8446].  Sequence
+   numbers are maintained separately for each direction and are reset
+   whenever new record protection keys are installed.  Record padding is
+   handled as specified in Section 5.4 of [RFC8446].
 
    The application traffic secrets MUST be deleted after deriving the
    traffic keys.
@@ -239,6 +245,12 @@ Table of Contents
 
    Key material that is replaced in this way MUST be deleted.
 
+   The key usage limits in Section 5.5 of [RFC8446] apply to each set of
+   MLS-TLS record protection keys.  Before reaching those limits, or
+   before a record sequence number would wrap, an implementation MUST
+   replace the record protection keys using the update mechanism in this
+   section or terminate the connection.
+
 9.  Preventing cross-protocol attacks
 
    TODO: Define a component that the initiator needs to include in its
@@ -259,9 +271,9 @@ Table of Contents
    [I-D.draft-ietf-mls-pq-ciphersuites]
               Mahy, R. and R. Barnes, "ML-KEM and Hybrid Cipher Suites
               for Messaging Layer Security", Work in Progress, Internet-
-              Draft, draft-ietf-mls-pq-ciphersuites-04, 18 March 2026,
+              Draft, draft-ietf-mls-pq-ciphersuites-05, 2 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-mls-pq-
-              ciphersuites-04>.
+              ciphersuites-05>.
 
    [I-D.draft-kohbrok-mls-two-party-profile]
               Kohbrok, K. and R. Robert, "A two-party profile for MLS",
