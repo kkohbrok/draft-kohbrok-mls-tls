@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-05T03:32:52.339679+00:00",
+  "timestamp": "2026-07-07T03:31:42.006469+00:00",
   "repo": "kkohbrok/draft-kohbrok-mls-tls",
   "labels": [
     {
@@ -84,26 +84,42 @@
       "id": "PR_kwDOQm-z8s7sGwmE",
       "title": "nonces, padding and key usage limit",
       "url": "https://github.com/kkohbrok/draft-kohbrok-mls-tls/pull/2",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kkohbrok",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-06-30T07:07:15Z",
-      "updatedAt": "2026-06-30T07:10:14Z",
+      "updatedAt": "2026-07-06T14:30:18Z",
       "baseRepository": "kkohbrok/draft-kohbrok-mls-tls",
       "baseRefName": "main",
       "baseRefOid": "3787dd1dd813490720d5813d2752add5d1dc05e2",
       "headRepository": "kkohbrok/draft-kohbrok-mls-tls",
       "headRefName": "konrad/record_layer_details",
       "headRefOid": "37ed119c0bc9a7f6b804e99fb2c36dd7cc817a45",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-07-06T14:30:17Z",
+      "mergedAt": "2026-07-06T14:30:17Z",
+      "mergedBy": "kkohbrok",
+      "mergeCommit": {
+        "oid": "7e6d65459ffd6805736e9477883583e4e509a51d"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOQm-z8s8AAAABFF7S2g",
+          "commit": {
+            "abbreviatedOid": "37ed119"
+          },
+          "author": "raphaelrobert",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-07-06T14:21:47Z",
+          "updatedAt": "2026-07-06T14:21:47Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
